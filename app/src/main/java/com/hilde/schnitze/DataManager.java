@@ -36,6 +36,9 @@ public class DataManager {
 
         boolean has_db_data = dbh.checkOrCreateDefaultData(this.context, this.setupFoodList());
 
+        // rewrite Length
+        FOOD_LIST_SIZE = this.setupFoodList().size();
+
         // read db data to SharedPreferences, if this shared data is not empty
         if (isCurrentFoodNameListEmpty()){
             List<String> my_list = dbh.getAllData();
@@ -91,7 +94,11 @@ public class DataManager {
     public boolean isCurrentFoodNameListEmpty() {
         sharedPreferences = context.getSharedPreferences("Food", Context.MODE_PRIVATE);
         Set<String> foodset = sharedPreferences.getStringSet("FoodNameList", null);
-        boolean isFoodEmpty = foodset.isEmpty();
+        boolean isFoodEmpty = true;
+        if (foodset != null){
+            isFoodEmpty = foodset.isEmpty();
+        }
+
         return isFoodEmpty;
     }
 
@@ -129,6 +136,65 @@ public class DataManager {
         v.add("Nudelsalat");
         v.add("Nudelauflauf");
         v.add("Nudeln mit Tomatensoße");
+        v.add("Krautnudeln");
+        v.add("Nudeln mit Maggi");
+        v.add("Nudeln mit Lachs");
+        v.add("Kartoffeln mit Quark");
+        v.add("Senfeier");
+        v.add("Königsberger Klopse");
+        v.add("Bouletten");
+        v.add("Überbackene Hackbällchen");
+        v.add("Kartoffeln mit Spinat und Ei");
+        v.add("Kartoffeln mit Gemüse");
+        v.add("Gemüseblech");
+        v.add("Kartoffelecken");
+        v.add("Kartoffelauflauf");
+        v.add("Bratkartoffeln");
+        v.add("Kartoffelbrei mit Leber");
+        v.add("Kartoffelbrei mit fisch");
+        v.add("Kartoffelsuppe");
+        v.add("Käse-Lauch-suppe");
+        v.add("Brokkolisuppe");
+        v.add("Spargelsuppe");
+        v.add("Kirschsuppe");
+        v.add("Erbsensuppe");
+        v.add("Linsensuppe");
+        v.add("Kürbissuppe");
+        v.add("Gemüseblech");
+        v.add("Gefüllte Paprika mit Reis");
+        v.add("Frikassee mit Reis");
+        v.add("Letscho mit Reis");
+        v.add("Reis mit Scheiß");
+        v.add("Reis mit Reis");
+        v.add("Stulle mit Brot");
+        v.add("Gulasch");
+        v.add("Schweinebraten");
+        v.add("Rouladen");
+        v.add("Kassler");
+        v.add("Grießbrei");
+        v.add("Blätterteigrollen");
+        v.add("Pizza");
+        v.add("Flammkuchen");
+        v.add("Kartoffelsalat");
+        v.add("Gemischter Salat mit Mango");
+        v.add("Gemischter salat mit Granatapfel");
+        v.add("Eierkuchen");
+        v.add("Milchreis");
+        v.add("Quiche");
+        v.add("Chinesische Nudeln");
+        v.add("Hähnchencurry");
+        v.add("Pilzpfanne");
+        v.add("Zwiebelfleisch");
+        v.add("Cordon Bleu");
+        v.add("Schlemmerfilet");
+        v.add("Fischstäbchen");
+        v.add("Hühnersuppe");
+        v.add("Toast Hawaii");
+        v.add("nix");
+        v.add("Bauerntopf");
+        v.add("Chili Con carne");
+        v.add("Lachswraps");
+        v.add("Pangasiusfilet an Zitronenkartoffeln");
         return v;
     }
 

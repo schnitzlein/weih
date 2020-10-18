@@ -30,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
             this.onCreate(db);
             this.addDefaultData(my_default_data);
         } else {
+            //this.deleteTable();
             Log.i("DATA", "Database already have data entries: "+ this.numberOfRows());
             has_db_data = true;
         }
@@ -109,6 +110,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return is_already_in_database;
     }
 
+    public void findFoodAndPrint(String foodname) {
+        String query = "SELECT * FROM "+TABLE_NAME+" WHERE "+COLUMN_FOODNAME+" LIKE '%" + foodname +"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursorC = db.rawQuery(query, null);
+        while (cursorC.moveToNext()) {
+            Log.i("DB",cursorC.getString(0) + " : " + cursorC.getString(1));
+        }
+    }
+
     public Cursor getData(int id) {
         db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from "+TABLE_NAME+" where id="+id+"", null );
@@ -146,6 +156,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_NAME,
                 "id = ? ",
                 new String[] { Integer.toString(id) });
+    }
+
+    public void deleteTable() {
+        db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        Log.i("DB", "DB deleted.");
     }
 
     public ArrayList<String> getAllData() {

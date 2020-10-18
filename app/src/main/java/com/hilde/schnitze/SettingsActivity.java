@@ -99,10 +99,10 @@ public class SettingsActivity extends AppCompatActivity {
             Log.i("SETTINGS", "new content: "+newValue.toString());
 
             if (db.findFood(newValue.toString()) == true) {
-                Toast.makeText(this.context,"This item is already in database.",10).show();
+                Toast.makeText(this.context,"This item is already in database.",Toast.LENGTH_LONG).show(); // make it to 10 secs
             } else {
                 db.addFood(newValue.toString());
-                Toast.makeText(this.context,"Item is added to database.",5).show();
+                Toast.makeText(this.context,"Item is added to database.",Toast.LENGTH_SHORT).show(); // make it to 5 secs
             }
 
 

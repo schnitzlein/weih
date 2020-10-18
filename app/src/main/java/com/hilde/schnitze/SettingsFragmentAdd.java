@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 
@@ -31,14 +33,17 @@ public class SettingsFragmentAdd extends Fragment {
     private Button addButton;
     Button add_button;
     String ui_food_name;
+
+    Button deleteButton;
     Context context;
     TableLayout tbl;
 
     SharedPreferences sharedPreferences;
     EditTextPreference etp;
-    DBHelper db;
+    static DBHelper db;
     ArrayList<String> array_list;
 
+    // TODO: override onFocusListener Interface with argument
 
     public SettingsFragmentAdd(Context context){
         this.context = context;
@@ -59,16 +64,9 @@ public class SettingsFragmentAdd extends Fragment {
         this.db = new DBHelper(this.context);
         array_list  = new ArrayList<String>();
         array_list = db.getAllData();
-
+        //deleteButton = (Button) view.findViewById(R.id.floatingActionButton);
 
         tbl = (TableLayout)view.findViewById(R.id.foodtable);
-        // delcare a new row
-        //TableRow newRow = new TableRow(context);
-        // add views to the row
-        //newRow.addView(this.addText("foobar", context));
-        // add the row to the table layout
-        //tbl.addView(newRow);
-
 
         //array_list.forEach((n) -> Log.i(("DEBUG", n));
         for (String food : array_list){
@@ -91,15 +89,30 @@ public class SettingsFragmentAdd extends Fragment {
     public TextView addText(String text, Context ctx){
         TextView tv = new TextView(ctx);
         tv.setText(text);
+        tv.setOnClickListener(addTextOnClickListener);
+
+        // database id : FoodName
+        this.db.findFoodAndPrint(text);
         //tv = (TextView)view.findViewById(R.id.textview_second);
         //tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
 
         return tv;
     }
 
+    // create a specific Text OnClickListener
+    public View.OnClickListener addTextOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v){
+
+            TextView tv = (TextView) v;
+            String str = tv.getText().toString();
+            Toast.makeText(context,"Hi there: "+str,Toast.LENGTH_LONG).show(); // make it to 10 secs
+            SettingsFragmentAdd.db.findFoodAndPrint(str);
+        }
+    };
 
 
-
+    /*
     private View.OnClickListener addButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -110,6 +123,7 @@ public class SettingsFragmentAdd extends Fragment {
     private void addButtonClicked() {
         ui_food_name = mydata.getRandomFoodName();
         tv.setText(ui_food_name);
-        //todo add here nav graph back or something dialog ok added toast
+
     }
+     */
 }
