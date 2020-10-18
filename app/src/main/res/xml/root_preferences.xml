@@ -1,0 +1,20 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/food_header">
+
+        <EditTextPreference
+            app:key="ui_add_foodname"
+            app:title="@string/fragment_add"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="monday"
+            app:entries="@array/week_entries"
+            app:entryValues="@array/week_values"
+            app:key="ui_show_foodnames"
+            app:title="@string/fragment_show"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
