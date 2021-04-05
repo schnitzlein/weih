@@ -141,26 +141,45 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateFoodname (Integer id, String foodname) {
+    // return value is the amount of entry numbers are changed
+    public int updateFoodname(Integer id, String foodname) {
         db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("foodname", foodname);
 
-        db.update(""+TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(id) } );
-        Log.d("foobar", "add sth");
-        return true;
+        return db.update("food", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
     }
 
-    public Integer deleteFoodname (Integer id) {
+    public String findFoodname(String foodname){
+        String query = "SELECT * FROM food WHERE foodname LIKE '%" + foodname +"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursorC = db.rawQuery(query, null);
+        return cursorC.getString(1);
+    }
+
+    // return value is the amount of entry numbers are deleted
+    public int deleteFoodID(int id) {
         db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME,
+        return db.delete("food",
                 "id = ? ",
                 new String[] { Integer.toString(id) });
     }
 
+    // sec. rel
+    public void deleteFoodname(String foodname){
+        String query = "SELECT * FROM food WHERE foodname LIKE '%" + foodname +"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursorC = db.rawQuery(query, null);
+        while (cursorC.moveToNext()) {
+            Log.i("DELETE",cursorC.getString(0) + " : " + cursorC.getString(1));
+            int toBeDeleted = cursorC.getInt(0);
+            deleteFoodID(toBeDeleted);
+        }
+    }
+
     public void deleteTable() {
         db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS food");
         Log.i("DB", "DB deleted.");
     }
 
@@ -174,6 +193,7 @@ public class DBHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(COLUMN_FOODNAME)));
             res.moveToNext();
         }
+        Log.i("DATA", "Length of Array: "+array_list.size());
         return array_list;
     }
 

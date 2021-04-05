@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: add option in settings if database is empty recreate it
         //TODO: add via option UI to add entrys in database
         //TODO: Performance/Stabilty/Ressources: onTrimMemory crash prevent: https://developer.android.com/topic/performance/memory
+        //TODO: Refactor, especiallty the Class Names and the Settings Entries are obsolete, wrong, or misleading
     }
 
 

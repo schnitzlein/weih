@@ -1,10 +1,12 @@
 package com.hilde.schnitze;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.EditTextPreference;
@@ -27,14 +29,14 @@ import java.util.ArrayList;
 
 public class SettingsFragmentAdd extends Fragment {
 
-    DataManager mydata;
+    //DataManager mydata;
     TextView tv;
     //add here the TextInput
     private Button addButton;
-    Button add_button;
-    String ui_food_name;
+    //Button add_button;
+    //String ui_food_name;
 
-    Button deleteButton;
+    //Button deleteButton;
     Context context;
     TableLayout tbl;
 
@@ -43,11 +45,16 @@ public class SettingsFragmentAdd extends Fragment {
     static DBHelper db;
     ArrayList<String> array_list;
 
-    // TODO: override onFocusListener Interface with argument
+    private final Object sync = new Object();
+
+    // TODO: cleanup and solve the misleading names in menu
+    // TODO: refactor me
+
 
     public SettingsFragmentAdd(Context context){
         this.context = context;
     }
+
 
     @Override
     public View onCreateView(
@@ -62,11 +69,18 @@ public class SettingsFragmentAdd extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.db = new DBHelper(this.context);
+
+        //
+        db.deleteFoodID(70);
+        //
+
+
         array_list  = new ArrayList<String>();
         array_list = db.getAllData();
-        //deleteButton = (Button) view.findViewById(R.id.floatingActionButton);
 
         tbl = (TableLayout)view.findViewById(R.id.foodtable);
+
+
 
         //array_list.forEach((n) -> Log.i(("DEBUG", n));
         for (String food : array_list){
@@ -76,11 +90,13 @@ public class SettingsFragmentAdd extends Fragment {
 
             newRow.addView(this.addText(food, context));
             tbl.addView(newRow);
+            Log.d("DATA","add: "+food);
         }
+
     }
 
     public TableRow addRow(Context ctx){
-        TableRow newRow = new TableRow(context);
+        TableRow newRow = new TableRow(ctx);
         //newRow.setBackgroundColor(234);
 
         return newRow;
@@ -88,28 +104,84 @@ public class SettingsFragmentAdd extends Fragment {
 
     public TextView addText(String text, Context ctx){
         TextView tv = new TextView(ctx);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
         tv.setText(text);
         tv.setOnClickListener(addTextOnClickListener);
 
         // database id : FoodName
         this.db.findFoodAndPrint(text);
-        //tv = (TextView)view.findViewById(R.id.textview_second);
-        //tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f);
+
 
         return tv;
     }
 
     // create a specific Text OnClickListener
-    public View.OnClickListener addTextOnClickListener = new View.OnClickListener() {
+    public final View.OnClickListener addTextOnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v){
+        public void onClick(View v) {
 
             TextView tv = (TextView) v;
-            String str = tv.getText().toString();
-            Toast.makeText(context,"Hi there: "+str,Toast.LENGTH_LONG).show(); // make it to 10 secs
-            SettingsFragmentAdd.db.findFoodAndPrint(str);
+            final String foodname = tv.getText().toString();
+            SettingsFragmentAdd.db.findFoodAndPrint(foodname);
+            Toast.makeText(context, "Try Deleting: " + foodname, Toast.LENGTH_SHORT).show();
+
+            // Dialog Box
+            DeleteDialog dialog = new DeleteDialog(context, foodname);
+            //dialog.setDialogQuestion("Are you sure to delete:"+ foodname +"?");
+            dialog.setDialogResult(new DeleteDialog.OnMyDialogResult() {
+                public void finish(String result, Bundle communcation) {
+                    // now you can use the 'result' on your activity
+                    Log.i("DATA", "foobar: " + result);
+
+                    // ...
+                    //String foodname = communcation.getString("DIALOG_FOODNAME", "");
+                    //boolean delete = communcation.getBoolean("DIALOG_DELETE", false);
+                    //Log.i("DATA", "delete: " + delete);
+                    if (Boolean.valueOf(result) == true) {
+                        //db.findFoodname(foodname);
+                        db.deleteFoodname(foodname);
+                        Toast.makeText(context, "Success with Deleting: " + foodname, Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(context, "Abort Deleting: " + foodname, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            dialog.show();
+
+            Log.i("DATA", "ergebnisse: " + dialog.delete);
+
+
+
+
+
+
+            /*
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setItems(new String[]{foodname},dialogClickListener);
+            builder.setMessage("Are you sure to delete:"+ foodname +"?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+            */
         }
     };
+
+    // Dialog Box Listener
+    public DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicke
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    break;
+            }
+        }
+    };
+
+
 
 
     /*

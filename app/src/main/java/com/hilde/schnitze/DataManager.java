@@ -29,6 +29,7 @@ public class DataManager {
         dbh = new DBHelper(this.context);
 
         // TODO: put init of data in sub function if constructor is used twice in classes
+        // TODO: create singleton (aka static object with semaphor)
         sharedPreferences = context.getSharedPreferences("Food", Context.MODE_PRIVATE);
         boolean ret2 = dbh.hasDatabaseData(this.context);
         boolean ret = dbh.doesDatabaseExist(this.context);
@@ -113,6 +114,7 @@ public class DataManager {
 
     // TODO: add this sharedPreferences.registerOnSharedPreferenceChangeListener(); to react on change FOOD_LIST_SIZE
     public int getMyRandom(){
+        this.FOOD_LIST_SIZE = dbh.numberOfRows();
         Random r = new Random();
         int rand_number = r.nextInt(FOOD_LIST_SIZE);
         return rand_number;

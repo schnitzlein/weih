@@ -23,16 +23,16 @@ import androidx.preference.PreferenceManager;
 public class SettingsActivity extends AppCompatActivity {
 
     Context context = this;
-    //TODO: Essen hinzufügen - ok clean classes and rename/refactor
-    //TODO: Essen anzeigen - in progress
-    //TODO: Essen löschen
-    //TODO: Essen alles_löschen
-    //TODO: Bild hinzufügen in der mitte mit Teller und Messer Gabel
-    //TODO: after add in DB, change the db entries Number, (also for the getrandomnumber)
-    //TODO: after remove in DB, change the db entries number, ...
+    //TODO: Essen hinzufügen - ok
+    //TODO: Essen anzeigen - ok
+    //TODO: Essen löschen - in progress
+    //TODO: after add in DB, change the db entries Number, (also for the getrandomnumber) - IMPORTANT
+    //TODO: after remove in DB, change the db entries number, ... - IMPORTANT
+    //TODO: Essen alles_löschen - in progress
+    //TODO: Bild hinzufügen in der mitte mit Teller und Messer Gabel - in progress
     //TODO: check schnellen Zwischenspeicher, wenn vorhanden tue nix, ansonsten erstelle
     //TODO: überlege ob die zwei/drei DB Objekte wirklich notwendig sind.
-
+    //TODO: clean classes and rename/refactor
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
         //return super.onSupportNavigateUp();
     }
 
+    // inner class needs to be excluded in refactor
     public static class SettingsFragment extends PreferenceFragmentCompat  {
         SharedPreferences sharedPreferences;
         EditTextPreference etp;
